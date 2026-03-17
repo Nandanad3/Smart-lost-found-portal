@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CampusFind — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="logo">Campus<span>Find</span></a>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('browse')">🔍 Browse</button>
+    <button class="nav-tab"        onclick="showSection('myitems')">📋 My Items</button>
+    <button class="nav-tab"        onclick="showSection('claims')">🤝 Claims <span class="nav-badge" id="claimsBadge" style="display:none">0</span></button>
+    <button class="nav-tab"        onclick="showSection('register')">➕ Report</button>
+  </div>
+  <div class="nav-right">
+    <a href="../Admin/admin-login.html" class="admin-nav-link">🛡️ Admin</a>
+    <div class="user-badge">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div class="user-info">
+        <span class="user-name" id="userName">Loading…</span>
+        <span class="user-roll" id="userRoll"></span>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Log Out</button>
+  </div>
+</nav>
+
+<div class="dash-wrapper">
+  <aside class="sidebar">
+    <div class="profile-card">
+      <div class="profile-avatar" id="sideAvatar">?</div>
+      <div class="profile-name"   id="sideName">Student</div>
+      <div class="profile-dept"   id="sideDept">Department</div>
+      <div class="profile-roll"   id="sideRoll">Roll No.</div>
+    </div>
+    <p class="sidebar-label">Navigation</p>
+    <ul class="sidebar-links">
+      <li><button class="sidebar-btn active" onclick="showSection('browse')">🔍 Browse Items</button></li>
+      <li><button class="sidebar-btn"        onclick="showSection('myitems')">📋 My Reports <span class="sb-count" id="myItemCountBadge">0</span></button></li>
+      <li><button class="sidebar-btn"        onclick="showSection('claims')">🤝 My Claims <span class="sb-count" id="myClaimsBadge">0</span></button></li>
+      <li><button class="sidebar-btn"        onclick="showSection('register')">➕ Report Item</button></li>
+    </ul>
+    <p class="sidebar-label top-gap">My Stats</p>
+    <div class="sidebar-stats">
+      <div class="stat-box"><div class="stat-num red"    id="myLostCount">0</div><div class="stat-lbl">Lost</div></div>
+      <div class="stat-box"><div class="stat-num green"  id="myFoundCount">0</div><div class="stat-lbl">Found</div></div>
+      <div class="stat-box"><div class="stat-num yellow" id="myPendingCount">0</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat-box"><div class="stat-num blue"   id="myApprovedCount">0</div><div class="stat-lbl">Live</div></div>
+    </div>
+    <p class="sidebar-label top-gap">Campus</p>
+    <div class="sidebar-stats">
+      <div class="stat-box"><div class="stat-num red"   id="allLostCount">0</div><div class="stat-lbl">Total Lost</div></div>
+      <div class="stat-box"><div class="stat-num green" id="allFoundCount">0</div><div class="stat-lbl">Total Found</div></div>
+    </div>
+    <div class="sidebar-tip">
+      📍 <strong>Drop-off Points:</strong><br/>Library · Cafeteria · Sports Complex · Admin Block · Security
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BROWSE -->
+    <section id="section-browse" class="content-section active-section">
+      <div class="page-header">
+        <div>
+          <div class="page-tag">Campus Portal</div>
+          <h1 class="page-title">Browse Lost &amp; Found</h1>
+          <p class="page-desc">See something that's yours? Submit a claim — contact details revealed only after admin approves.</p>
+        </div>
+      </div>
+      <div class="browse-hero">
+        <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?w=1200&q=80&auto=format&fit=crop" alt="campus" class="browse-hero-img"/>
+        <div class="browse-hero-overlay">
+          <div class="browse-hero-stat"><span id="heroLostCount">0</span><small>Items Lost</small></div>
+          <div class="browse-hero-divider"></div>
+          <div class="browse-hero-stat"><span id="heroFoundCount">0</span><small>Items Found</small></div>
+          <div class="browse-hero-divider"></div>
+          <div class="browse-hero-stat"><span id="heroClaimedCount">0</span><small>Reunited</small></div>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input type="text" class="filter-input" id="searchInput" placeholder="🔍  Search items or location…" oninput="renderAll()"/>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-tab"        onclick="setFilter('lost',this)">🔴 Lost</button>
+          <button class="filter-tab"        onclick="setFilter('found',this)">🟢 Found</button>
+        </div>
+        <select class="filter-select" id="catFilter" onchange="renderAll()">
+          <option value="">All Categories</option>
+          <option>Electronics</option><option>Stationery</option><option>Clothing</option>
+          <option>Accessories</option><option>ID / Documents</option><option>Books</option>
+          <option>Keys</option><option>Bags</option><option>Sports Equipment</option><option>Other</option>
+        </select>
+        <select class="filter-select" id="locationFilter" onchange="renderAll()">
+          <option value="">All Locations</option>
+          <option>Main Library</option><option>Student Cafeteria</option><option>Sports Complex</option>
+          <option>Science Block</option><option>Admin Block</option><option>Auditorium</option>
+          <option>Parking Area</option><option>Hostel Block A</option><option>Hostel Block B</option><option>Other</option>
+        </select>
+      </div>
+      <div class="items-grid" id="browseGrid"></div>
+      <div class="empty-state hidden" id="browseEmpty">
+        <div class="empty-icon">🔎</div><h3>No items found</h3>
+        <p>Try a different filter or be the first to report!</p>
+        <button class="btn-primary" style="margin-top:1rem" onclick="showSection('register')">+ Report Item</button>
+      </div>
+    </section>
+
+    <!-- MY ITEMS -->
+    <section id="section-myitems" class="content-section">
+      <div class="page-header">
+        <div>
+          <div class="page-tag">My Dashboard</div>
+          <h1 class="page-title">My Reports</h1>
+          <p class="page-desc">Manage your reports and review incoming claim requests on your found items.</p>
+        </div>
+        <button class="btn-primary" onclick="showSection('register')">➕ New Report</button>
+      </div>
+      <div class="my-summary-row">
+        <div class="summary-pill total"   id="sum-total">  <div class="sum-n">0</div><div class="sum-l">Total</div></div>
+        <div class="summary-pill pending" id="sum-pending"><div class="sum-n">0</div><div class="sum-l">Pending</div></div>
+        <div class="summary-pill live"    id="sum-live">   <div class="sum-n">0</div><div class="sum-l">Live</div></div>
+        <div class="summary-pill lost"    id="sum-lost">   <div class="sum-n">0</div><div class="sum-l">Lost</div></div>
+        <div class="summary-pill found"   id="sum-found">  <div class="sum-n">0</div><div class="sum-l">Found</div></div>
+      </div>
+      <div class="pending-banner" id="pendingBanner" style="display:none">
+        <span class="pb-icon">⏳</span>
+        <div><strong>You have pending reports</strong><p>Admin will review shortly. You'll see them go Live here.</p></div>
+      </div>
+      <div class="claims-banner" id="claimsIncomingBanner" style="display:none">
+        <span class="pb-icon">🤝</span>
+        <div><strong>Incoming claim request!</strong><p>Someone is claiming your found item. <button class="inline-link" onclick="showSection('claims')">View Claims →</button></p></div>
+      </div>
+      <div class="filter-bar">
+        <input type="text" class="filter-input" id="mySearch" placeholder="🔍  Search your reports…" oninput="renderMyItems()"/>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="setMyFilter('all',this)">All</button>
+          <button class="filter-tab"        onclick="setMyFilter('pending',this)">⏳ Pending</button>
+          <button class="filter-tab"        onclick="setMyFilter('approved',this)">✅ Live</button>
+          <button class="filter-tab"        onclick="setMyFilter('lost',this)">🔴 Lost</button>
+          <button class="filter-tab"        onclick="setMyFilter('found',this)">🟢 Found</button>
+        </div>
+      </div>
+      <div class="my-items-list" id="myItemsList"></div>
+      <div class="empty-state hidden" id="myEmpty">
+        <div class="empty-icon">📋</div><h3>No reports yet</h3>
+        <p>Start by reporting a lost or found item.</p>
+        <button class="btn-primary" style="margin-top:1rem" onclick="showSection('register')">+ Report Item</button>
+      </div>
+    </section>
+
+    <!-- CLAIMS -->
+    <section id="section-claims" class="content-section">
+      <div class="page-header">
+        <div>
+          <div class="page-tag">Claim Center</div>
+          <h1 class="page-title">Claims</h1>
+          <p class="page-desc">Track claims you submitted and review incoming requests on your found items.</p>
+        </div>
+      </div>
+      <div class="claims-tabs-bar">
+        <button class="claims-tab active" onclick="setClaimsTab('sent',this)">📤 Sent by Me</button>
+        <button class="claims-tab"        onclick="setClaimsTab('received',this)">📥 Received on My Items <span class="nav-badge" id="receivedBadge" style="display:none">0</span></button>
+      </div>
+      <div id="claims-sent-panel">
+        <div class="claims-list" id="sentClaimsList"></div>
+        <div class="empty-state hidden" id="sentEmpty">
+          <div class="empty-icon">📤</div><h3>No claims sent yet</h3>
+          <p>Browse found items and submit a claim if you spot yours.</p>
+        </div>
+      </div>
+      <div id="claims-received-panel" style="display:none">
+        <div class="claims-list" id="receivedClaimsList"></div>
+        <div class="empty-state hidden" id="receivedEmpty">
+          <div class="empty-icon">📥</div><h3>No incoming claims</h3>
+          <p>When someone claims your found item, it will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT ITEM -->
+    <section id="section-register" class="content-section">
+      <div class="page-header">
+        <div>
+          <div class="page-tag">Report</div>
+          <h1 class="page-title">Report an Item</h1>
+          <p class="page-desc">Lost or found something on campus? Fill in the details below.</p>
+        </div>
+      </div>
+      <div class="report-layout">
+        <div class="form-card">
+          <div class="form-section">
+            <label class="form-label">Item Type <span class="req">*</span></label>
+            <div class="type-toggle">
+              <button class="type-btn active" id="type-lost"  onclick="selectType('lost')">🔴 I Lost Something</button>
+              <button class="type-btn"        id="type-found" onclick="selectType('found')">🟢 I Found Something</button>
+            </div>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Item Name <span class="req">*</span></label>
+            <input type="text" class="form-input" id="itemName" placeholder="e.g. Black Samsung Charger"/>
+          </div>
+          <div class="form-row-2">
+            <div class="form-section">
+              <label class="form-label">Category <span class="req">*</span></label>
+              <select class="form-input" id="itemCategory">
+                <option value="">Select category…</option>
+                <option>Electronics</option><option>Stationery</option><option>Clothing</option>
+                <option>Accessories</option><option>ID / Documents</option><option>Books</option>
+                <option>Keys</option><option>Bags</option><option>Sports Equipment</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-section">
+              <label class="form-label" id="dateLabelText">Date Lost <span class="req">*</span></label>
+              <input type="date" class="form-input" id="itemDate"/>
+            </div>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Campus Location <span class="req">*</span></label>
+            <select class="form-input" id="itemLocation">
+              <option value="">Select location…</option>
+              <option>Main Library</option><option>Student Cafeteria</option><option>Sports Complex</option>
+              <option>Science Block</option><option>Admin Block</option><option>Auditorium</option>
+              <option>Parking Area</option><option>Hostel Block A</option><option>Hostel Block B</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Public Description <span class="label-badge public">👁 Visible to all</span></label>
+            <textarea class="form-input form-textarea" id="itemDesc" placeholder="Color, brand, size, visible features…"></textarea>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Secret Proof Detail <span class="req">*</span> <span class="label-badge secret">🔒 Hidden from public</span></label>
+            <textarea class="form-input form-textarea" id="itemSecret" placeholder="Something ONLY the real owner would know — name written inside, scratch on corner, keychain attached…"></textarea>
+            <p class="field-hint">🔒 Never shown publicly. Admin uses this to verify ownership claims.</p>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Photo <span class="opt">(optional)</span></label>
+            <div class="upload-area" onclick="document.getElementById('itemImage').click()">
+              <input type="file" id="itemImage" accept="image/*" style="display:none" onchange="previewImage(this)"/>
+              <div id="uploadPlaceholder">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">Click to upload photo</div>
+                <div class="upload-hint">JPG, PNG up to 5 MB</div>
+              </div>
+              <img id="imagePreview" class="image-preview hidden" alt="preview"/>
+            </div>
+            <button id="removeImgBtn" class="remove-img-btn hidden" onclick="removeImage()">✕ Remove photo</button>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary btn-submit" onclick="submitReport()">Submit Report →</button>
+            <button class="btn-cancel" onclick="clearForm()">Clear</button>
+          </div>
+        </div>
+
+        <div class="tips-panel">
+          <div class="tip-card">
+            <div class="tip-title">💡 How Claims Work</div>
+            <div class="tip-item"><span class="tip-num">1</span><span>Submit report — admin reviews and approves it</span></div>
+            <div class="tip-item"><span class="tip-num">2</span><span>A matching student submits a claim with proof answers</span></div>
+            <div class="tip-item"><span class="tip-num">3</span><span>Admin compares answers against your <strong>Secret Detail</strong></span></div>
+            <div class="tip-item"><span class="tip-num">4</span><span>Contact details revealed <strong>only after</strong> admin approves</span></div>
+          </div>
+          <div class="tip-card tip-warning">
+            <div class="tip-title">🔒 Privacy First</div>
+            <p>Your contact info is <strong>never shown publicly</strong>. Only a verified claimant sees it — after admin approval.</p>
+          </div>
+          <div class="tip-card tip-info">
+            <div class="tip-title">📍 Drop-off Points</div>
+            <p>Main Library · Student Cafeteria · Sports Complex · Admin Block · Security Office</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="detail-modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- CLAIM SUBMIT MODAL -->
+<div class="modal-overlay" id="claimModal">
+  <div class="detail-modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeClaimModal()">✕</button>
+    <div class="modal-body" style="padding:2rem">
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <div style="font-size:2.5rem;margin-bottom:.5rem">🤝</div>
+        <h2 style="font-size:1.3rem;font-weight:700;color:#1a2540">Submit a Claim</h2>
+        <p style="font-size:.88rem;color:#64748b;margin-top:.3rem">Answer all 3 questions — admin verifies using the reporter's secret detail.</p>
+      </div>
+      <input type="hidden" id="claimFoundId"/>
+      <div class="form-section">
+        <label class="form-label">Q1 — Brand, color, or model? <span class="req">*</span></label>
+        <input type="text" class="form-input" id="claimA1" placeholder="e.g. Samsung black 45W charger"/>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Q2 — Unique mark, sticker, damage or attachment? <span class="req">*</span></label>
+        <input type="text" class="form-input" id="claimA2" placeholder="e.g. Eiffel Tower keychain, scratch on corner"/>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Q3 — Where exactly did you lose it? <span class="req">*</span></label>
+        <input type="text" class="form-input" id="claimA3" placeholder="e.g. Table 4 near window, Main Library"/>
+      </div>
+      <div class="claim-privacy-note">
+        🔒 Your answers go to admin only. Contact details shared <strong>only if approved.</strong>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary btn-submit" onclick="submitClaim()">Submit Claim →</button>
+        <button class="btn-cancel" onclick="closeClaimModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="detail-modal" style="max-width:480px">
+    <button class="modal-close" onclick="closeEditModal()">✕</button>
+    <div class="modal-body" style="padding:2rem">
+      <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:1.2rem">✏️ Edit Report</h2>
+      <div class="notice-box" style="margin-bottom:1rem">⚠️ Editing resets status to <strong>Pending</strong> for re-review.</div>
+      <input type="hidden" id="editId"/>
+      <div class="form-section"><label class="form-label">Item Name</label><input type="text" class="form-input" id="editName"/></div>
+      <div class="form-row-2">
+        <div class="form-section">
+          <label class="form-label">Category</label>
+          <select class="form-input" id="editCategory">
+            <option>Electronics</option><option>Stationery</option><option>Clothing</option>
+            <option>Accessories</option><option>ID / Documents</option><option>Books</option>
+            <option>Keys</option><option>Bags</option><option>Sports Equipment</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-section"><label class="form-label">Date</label><input type="date" class="form-input" id="editDate"/></div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Location</label>
+        <select class="form-input" id="editLocation">
+          <option>Main Library</option><option>Student Cafeteria</option><option>Sports Complex</option>
+          <option>Science Block</option><option>Admin Block</option><option>Auditorium</option>
+          <option>Parking Area</option><option>Hostel Block A</option><option>Hostel Block B</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-section"><label class="form-label">Description</label><textarea class="form-input form-textarea" id="editDesc"></textarea></div>
+      <div class="form-actions">
+        <button class="btn-primary btn-submit" onclick="saveEdit()">Save Changes</button>
+        <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="confirm-box">
+    <div class="confirm-ico">🗑️</div>
+    <h3>Delete Report?</h3>
+    <p>This will permanently remove your report and cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="btn-delete-confirm" id="deleteYes">Yes, Delete</button>
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="dashboard.js"></script>
+</body>
+</html>
