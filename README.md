@@ -1,203 +1,244 @@
-📦 CampusFind – Smart Lost & Found Portal
-📌 Project Overview
+# 📦 CampusFind – Smart Lost & Found Portal
 
-CampusFind is a web-based Lost & Found Management System developed to help students, faculty, and staff efficiently report, search, and recover lost belongings within a campus environment.
+## 📌 Project Overview
+
+CampusFind is a web-based Lost & Found Management System designed to help students, faculty, and staff report, search, and recover lost belongings within a campus environment.
 
 The platform provides a centralized notice board where users can post lost item notices, register found items, submit ownership claims, and track recovery status. An administrative dashboard enables efficient management of users, items, and claims.
 
-🎯 Objectives
-Digitize the campus lost-and-found process.
-Provide a centralized platform for reporting lost and found items.
-Enable secure ownership verification through claim requests.
-Reduce the time required to recover lost belongings.
-Improve transparency and communication between owners and finders.
-✨ Key Features
-👤 User Authentication
-User Registration
-Secure Login & Logout
-Session Management
-Password Hashing for Security
-📢 Lost Item Reporting
-Create Lost Item Notices
-Add Item Description
-Specify Lost Location
-Add Contact Information
-Track Notice Status
-🔍 Found Item Registration
-Register Found Items
-Categorize Items
-View Detailed Item Information
-Update Item Status
-✅ Claim Verification System
-Submit Ownership Claims
-Verify Ownership Through Questions
-Claim Approval Workflow
-📋 Notice Board
-Public Lost Item Notice Board
-Browse Active Notices
-Search and Filter Items
-📊 Dashboard
-View Personal Reports
-Track Claims
-Monitor Item Recovery Progress
-🛡️ Admin Panel
-Manage Users
-Manage Items
-Monitor System Activity
-Administrative Authentication
-🛠️ Technology Stack
-Frontend
-HTML5
-CSS3
-JavaScript
-Backend
-PHP
-Database
-MySQL
-Server Environment
-XAMPP / Apache Server
-Development Tools
-Visual Studio Code
-Git & GitHub
-📂 Project Structure
+---
+
+## 🎯 Objectives
+
+* Digitize the campus lost-and-found process.
+* Provide a centralized platform for reporting lost and found items.
+* Enable secure ownership verification through claim requests.
+* Reduce the time required to recover lost belongings.
+* Improve transparency and communication between owners and finders.
+
+---
+
+## ✨ Features
+
+### 👤 User Authentication
+
+* User Registration
+* Secure Login & Logout
+* Session Management
+* Password Hashing
+
+### 📢 Lost Item Reporting
+
+* Create Lost Item Notices
+* Add Item Description
+* Specify Lost Location
+* Add Contact Information
+* Track Notice Status
+
+### 🔍 Found Item Registration
+
+* Register Found Items
+* Categorize Items
+* View Detailed Item Information
+* Update Item Status
+
+### ✅ Claim Verification System
+
+* Submit Ownership Claims
+* Verify Ownership Through Questions
+* Claim Approval Workflow
+
+### 📋 Notice Board
+
+* Public Lost Item Notice Board
+* Browse Active Notices
+* Search and Filter Items
+
+### 📊 Dashboard
+
+* View Personal Reports
+* Track Claims
+* Monitor Item Recovery Progress
+
+### 🛡️ Admin Panel
+
+* Manage Users
+* Manage Items
+* Monitor System Activity
+* Administrative Authentication
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* Bootstrap
+
+### Backend
+
+* PHP
+
+### Database
+
+* MySQL
+
+### Development Tools
+
+* XAMPP
+* Visual Studio Code
+* Git & GitHub
+
+---
+
+## 📂 Project Structure
+
+```text
 CampusFind/
 │
 ├── admin/
-│   ├── dashboard.php
-│   ├── items.php
-│   ├── users.php
-│   └── login.php
-│
 ├── auth/
-│   ├── login.php
-│   ├── signup.php
-│   └── logout.php
-│
 ├── config/
-│   └── db.php
-│
 ├── includes/
-│   ├── header.php
-│   └── footer.php
-│
 ├── items/
-│   ├── report.php
-│   ├── report-lost.php
-│   ├── claim.php
-│   ├── update-status.php
-│   └── update-lost-notice.php
-│
 ├── pages/
-│   ├── home.php
-│   ├── dashboard.php
-│   ├── notice-board.php
-│   └── item-detail.php
-│
 ├── assets/
-│
 ├── campusfind.sql
 ├── index.php
 └── README.md
-⚙️ Installation Guide
-Prerequisites
-PHP 8.0+
-MySQL
-XAMPP/WAMP Server
-Web Browser
-Step 1: Clone Repository
+```
+
+---
+
+## ⚙️ Installation
+
+### Prerequisites
+
+* PHP 8.0+
+* MySQL
+* XAMPP/WAMP
+
+### Clone Repository
+
+```bash
 git clone https://github.com/Nandanad3/Smart-lost-found-portal.git
-Step 2: Move Project
+```
+
+### Move Project
 
 Place the project folder inside:
 
+```text
 xampp/htdocs/
-Step 3: Create Database
-Open phpMyAdmin.
-Create a database named:
-campusfind
-Import:
-campusfind.sql
-Step 4: Configure Database
+```
 
-Update database credentials in:
+### Create Database
 
+1. Open phpMyAdmin
+2. Create a database named `campusfind`
+3. Import the `campusfind.sql` file
+
+### Configure Database
+
+Edit the database credentials in:
+
+```php
 config/db.php
+```
+
+```php
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'campusfind');
-Step 5: Run Project
+```
 
-Start:
+### Run the Project
 
-Apache
-MySQL
+Start Apache and MySQL from XAMPP.
 
 Open:
 
+```text
 http://localhost/campusfind
-🔄 System Workflow
-User creates an account.
-User logs into the portal.
-User reports a lost or found item.
-Item details are stored in the database.
-Other users browse available notices.
-Owners submit claims for matching items.
-Verification is performed.
-Item status is updated after successful recovery.
-🔒 Security Features
-Password Hashing using PHP Password API
-Session-Based Authentication
-Role-Based Access Control
-Protected Administrative Portal
-Secure Database Queries using PDO Prepared Statements
-📊 Database Modules
-Users
+```
 
-Stores registered user information.
+---
 
-Items
+## 🔄 Workflow
 
-Stores found item details.
+1. User registers and logs in.
+2. User reports a lost or found item.
+3. Item details are stored in the database.
+4. Users browse available notices.
+5. Owners submit claims for matching items.
+6. Verification is performed.
+7. Item status is updated after successful recovery.
 
-Lost Notices
+---
 
-Stores lost item reports.
+## 🔒 Security Features
 
-Claims
+* Password Hashing
+* Session-Based Authentication
+* Role-Based Access Control
+* Protected Administrative Portal
+* Secure Database Queries
 
-Tracks ownership verification requests.
+---
 
-Admins
+## 🚀 Future Enhancements
 
-Manages administrative access.
+* AI-Based Item Matching
+* Image Recognition for Lost Items
+* Email Notifications
+* Mobile Application Support
+* Real-Time Chat System
+* QR Code Verification
+* Advanced Search and Recommendation System
 
-🚀 Future Enhancements
-AI-Based Item Matching
-Image Recognition for Lost Items
-Email Notifications
-Mobile Application Integration
-Real-Time Chat Between Users
-QR Code-Based Item Verification
-Advanced Search & Recommendation System
-🎓 Academic Project Details
+---
 
-Project Title: CampusFind – Smart Lost & Found Portal
-Project Type: MCA Final Year Project
-Domain: Web Development
-Technology: PHP, MySQL, HTML, CSS, JavaScript
-Development Environment: XAMPP
+## 🎓 Academic Project
 
-👩‍💻 Author
+**Project Title:** CampusFind – Smart Lost & Found Portal
 
-Nandana Dinesh A
+**Project Type:** MCA Final Year Project
+
+**Domain:** Web Development
+
+**Technology Stack:** PHP, MySQL, HTML, CSS, JavaScript
+
+---
+
+## 👩‍💻 Author
+
+**Nandana Dinesh A**
+
 MCA Student
-GitHub: Nandanad3 GitHub Profile
 
-🙏 Acknowledgements
-PHP Community
-MySQL Documentation
-XAMPP
-Open Source Contributors
-Faculty Mentors and Project Guide
-🌟 CampusFind – Making Lost Items Easier to Find and Return Within the Campus Community.
+GitHub: https://github.com/Nandanad3
+
+---
+
+## 📜 License
+
+This project is developed for educational and academic purposes only.
+
+---
+
+## 🙏 Acknowledgements
+
+* PHP Community
+* MySQL Documentation
+* XAMPP
+* Open Source Contributors
+* Faculty Mentors and Project Guide
+
+---
+
+⭐ CampusFind – Making Lost Items Easier to Find and Return Within the Campus Community.
+
